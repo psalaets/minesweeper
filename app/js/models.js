@@ -37,16 +37,21 @@
   }
 
   Grid.prototype = {
-    addMines: function(count) {
-      if(count > this.width * this.height) {
-        throw new Error("Cannot add " + count + " mines. There are only " + (this.width * this.height) + " cells.");
+    addMines: function(count, exclude) {
+      var maxMines = (this.width * this.height) - 1;
+      if(count > maxMines) {
+        throw new Error("Cannot add " + count + " mines. There are only " + maxMines + " mine-able cells.");
+      }
+
+      function isMineable(cell) {
+        return !cell.mined &&
+          (cell.row !== exclude.row || cell.column !== exclude.column);
       }
 
       var minesLeft = count;
       while(minesLeft > 0) {
         var cell = this.randomCell();
-
-        if(!cell.mined) {
+        if(isMineable(cell)) {
           cell.mined = true;
           minesLeft--;
         }

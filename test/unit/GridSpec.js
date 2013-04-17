@@ -73,7 +73,7 @@ describe('Grid', function(){
   it('should add mines to cells', inject(function(Grid) {
     var g = new Grid(3, 5);
 
-    g.addMines(6);
+    g.addMines(6, {row: 1, column: 2});
 
     var mineCount = g.reduce(0, function(total, cell) {
       return total + (cell.mined ? 1 : 0);
@@ -86,7 +86,17 @@ describe('Grid', function(){
     var g = new Grid(3, 5);
 
     expect(function() {
-      g.addMines(16);
+      g.addMines(16, {row: 1, column: 2});
     }).toThrow();
+  }));
+
+  // This can fire false positives
+  it('should allow cell to be excluded when adding mines', inject(function(Grid) {
+    var g = new Grid(3, 3);
+
+    g.addMines(8, {row: 1, column: 2});
+
+    var excluded = g.getCell(1, 2);
+    expect(excluded.mined).toEqual(false);
   }));
 });
