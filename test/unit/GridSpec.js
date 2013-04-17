@@ -16,4 +16,22 @@ describe('Grid', function(){
       expect(g.rows[i].length).toEqual(5);
     }
   }));
+
+  it('should start cell numbering at top left', inject(function(Grid) {
+    var g = new Grid(3, 5);
+
+    var topLeftCell = g.rows[0][0];
+
+    expect(topLeftCell.row).toEqual(0);
+    expect(topLeftCell.column).toEqual(0);
+  }));
+
+  it('should end cell numbering at bottom right', inject(function(Grid) {
+    var g = new Grid(3, 5);
+
+    var botRightCell = g.rows[2][4];
+
+    expect(botRightCell.row).toEqual(2);
+    expect(botRightCell.column).toEqual(4);
+  }));
 });

@@ -27,7 +27,7 @@
       var row = [];
 
       for(var j = 0; j < columnCount; j++) {
-        row.push(new Cell());
+        row.push(new Cell(i, j));
       }
 
       this.rows.push(row);
