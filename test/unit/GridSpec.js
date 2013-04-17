@@ -70,32 +70,66 @@ describe('Grid', function(){
     expect(cell.column).toEqual(2);
   }));
 
-  it('should add mines to cells', inject(function(Grid) {
+  it('should return undefined when asked for Cell beyond row range', inject(function(Grid) {
     var g = new Grid(3, 5);
 
-    g.addMines(6, {row: 1, column: 2});
+    var cell = g.getCell(10, 2);
 
-    var mineCount = g.reduce(0, function(total, cell) {
-      return total + (cell.mined ? 1 : 0);
-    });
-
-    expect(mineCount).toEqual(6);
+    expect(cell).toBeUndefined();
   }));
 
-  it('should not allow adding more mines than mineable cells', inject(function(Grid) {
+  it('should return undefined when asked for Cell beyond column range', inject(function(Grid) {
     var g = new Grid(3, 5);
 
-    expect(function() {
-      g.addMines(15, {row: 1, column: 2});
-    }).toThrow();
+    var cell = g.getCell(1, 20);
+
+    expect(cell).toBeUndefined();
   }));
 
-  it('should allow cell to be excluded when adding mines', inject(function(Grid) {
-    var g = new Grid(3, 3);
+  describe('#addMines', function() {
+    it('should add mines to cells', inject(function(Grid) {
+      var g = new Grid(3, 5);
 
-    g.addMines(8, {row: 1, column: 2});
+      g.addMines(6, {row: 1, column: 2});
 
-    var excluded = g.getCell(1, 2);
-    expect(excluded.mined).toEqual(false);
-  }));
+      var mineCount = g.reduce(0, function(total, cell) {
+        return total + (cell.mined ? 1 : 0);
+      });
+
+      expect(mineCount).toEqual(6);
+    }));
+
+    it('should not allow adding more mines than mineable cells', inject(function(Grid) {
+      var g = new Grid(3, 5);
+
+      expect(function() {
+        g.addMines(15, {row: 1, column: 2});
+      }).toThrow();
+    }));
+
+    it('should allow a cell to be excluded', inject(function(Grid) {
+      var g = new Grid(3, 3);
+
+      g.addMines(8, {row: 1, column: 2});
+
+      var excluded = g.getCell(1, 2);
+      expect(excluded.mined).toEqual(false);
+    }));
+
+    it('should figure out adjacent mines for all cells', inject(function(Grid) {
+      var g = new Grid(2, 2);
+
+      g.addMines(3, {row: 0, column: 0});
+
+      var topLeft = g.getCell(0, 0);
+      var topRight = g.getCell(0, 1);
+      var botLeft = g.getCell(1, 0);
+      var botRight = g.getCell(1, 1);
+
+      expect(topLeft.adjacentMines).toEqual(3);
+      expect(topRight.adjacentMines).toEqual(2);
+      expect(botLeft.adjacentMines).toEqual(2);
+      expect(botRight.adjacentMines).toEqual(2);
+    }));
+  });
 });

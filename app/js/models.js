@@ -56,6 +56,11 @@
           minesLeft--;
         }
       }
+
+      var grid = this;
+      this.each(function(cell) {
+        grid.calculateAdjacentMines(cell);
+      });
     },
     randomCell: function() {
       //yoink http://stackoverflow.com/a/1527820
@@ -67,7 +72,28 @@
       var column = random(0, this.width - 1);
       return this.getCell(row, column);
     },
+    calculateAdjacentMines: function(cell) {
+      var adjacentMines = 0;
+
+      // row/col offsets from cell
+      var offsets = [
+        [-1, -1], [-1, 0], [-1, 1],
+        [0, -1],  /*cell*/ [0, 1],
+        [1, -1],  [1, 0],  [1, 1]
+      ];
+
+      var grid = this;
+      offsets.forEach(function(offset) {
+        var neighbor = grid.getCell(cell.row + offset[0], cell.column + offset[1]);
+        if(neighbor && neighbor.mined) {
+          adjacentMines++;
+        }
+      });
+
+      cell.adjacentMines = adjacentMines;
+    },
     getCell: function(row, col) {
+      if(row >= this.height || row < 0) return undefined;
       return this.rows[row][col];
     },
     // Execute a function once for each cell
