@@ -21,12 +21,14 @@
 
   function Grid(rowCount, columnCount) {
     this.rows = [];
+    this.height = rowCount;
+    this.width = columnCount;
 
-    for(var i = 0; i < rowCount; i++) {
+    for(var i = 0; i < this.height; i++) {
       // Build a row
       var row = [];
 
-      for(var j = 0; j < columnCount; j++) {
+      for(var j = 0; j < this.width; j++) {
         row.push(new Cell(i, j));
       }
 
@@ -36,7 +38,28 @@
 
   Grid.prototype = {
     addMines: function(count) {
+      var minesLeft = count;
+      while(minesLeft > 0) {
+        var cell = this.randomCell();
 
+        if(!cell.mined) {
+          cell.mined = true;
+          minesLeft--;
+        }
+      }
+    },
+    randomCell: function() {
+      //yoink http://stackoverflow.com/a/1527820
+      function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      var row = random(0, this.height - 1);
+      var column = random(0, this.width - 1);
+      return this.getCell(row, column);
+    },
+    getCell: function(row, col) {
+      return this.rows[row][col];
     },
     // Execute a function once for each cell
     each: function(fn) {

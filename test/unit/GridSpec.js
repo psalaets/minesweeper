@@ -60,4 +60,25 @@ describe('Grid', function(){
 
     expect(result).toEqual(6);
   }));
+
+  it('should be able to get Cell by row and column', inject(function(Grid) {
+    var g = new Grid(3, 5);
+
+    var cell = g.getCell(1, 2);
+
+    expect(cell.row).toEqual(1);
+    expect(cell.column).toEqual(2);
+  }));
+
+  it('should add mines to cells', inject(function(Grid) {
+    var g = new Grid(3, 5);
+
+    g.addMines(6);
+
+    var mineCount = g.reduce(0, function(total, cell) {
+      return total + (cell.mined ? 1 : 0);
+    });
+
+    expect(mineCount).toEqual(6);
+  }));
 });
