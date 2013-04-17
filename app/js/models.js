@@ -82,13 +82,12 @@
         [1, -1],  [1, 0],  [1, 1]
       ];
 
-      var grid = this;
       offsets.forEach(function(offset) {
-        var neighbor = grid.getCell(cell.row + offset[0], cell.column + offset[1]);
+        var neighbor = this.getCell(cell.row + offset[0], cell.column + offset[1]);
         if(neighbor && neighbor.mined) {
           adjacentMines++;
         }
-      });
+      }, this);
 
       cell.adjacentMines = adjacentMines;
     },

@@ -61,30 +61,48 @@ describe('Grid', function(){
     expect(result).toEqual(6);
   }));
 
-  it('should be able to get Cell by row and column', inject(function(Grid) {
-    var g = new Grid(3, 5);
+  describe('#getCell', function() {
+    it('should return Cell at row and column', inject(function(Grid) {
+      var g = new Grid(3, 5);
 
-    var cell = g.getCell(1, 2);
+      var cell = g.getCell(1, 2);
 
-    expect(cell.row).toEqual(1);
-    expect(cell.column).toEqual(2);
-  }));
+      expect(cell.row).toEqual(1);
+      expect(cell.column).toEqual(2);
+    }));
 
-  it('should return undefined when asked for Cell beyond row range', inject(function(Grid) {
-    var g = new Grid(3, 5);
+    it('should return undefined when row is too high', inject(function(Grid) {
+      var g = new Grid(3, 5);
 
-    var cell = g.getCell(10, 2);
+      var cell = g.getCell(10, 2);
 
-    expect(cell).toBeUndefined();
-  }));
+      expect(cell).toBeUndefined();
+    }));
 
-  it('should return undefined when asked for Cell beyond column range', inject(function(Grid) {
-    var g = new Grid(3, 5);
+    it('should return undefined when column is too high', inject(function(Grid) {
+      var g = new Grid(3, 5);
 
-    var cell = g.getCell(1, 20);
+      var cell = g.getCell(1, 20);
 
-    expect(cell).toBeUndefined();
-  }));
+      expect(cell).toBeUndefined();
+    }));
+
+    it('should return undefined when row is negative', inject(function(Grid) {
+      var g = new Grid(3, 5);
+
+      var cell = g.getCell(-1, 2);
+
+      expect(cell).toBeUndefined();
+    }));
+
+    it('should return undefined when column is negative', inject(function(Grid) {
+      var g = new Grid(3, 5);
+
+      var cell = g.getCell(1, -2);
+
+      expect(cell).toBeUndefined();
+    }));
+  });
 
   describe('#addMines', function() {
     it('should add mines to cells', inject(function(Grid) {
