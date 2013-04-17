@@ -34,4 +34,28 @@
     }
   }
 
+  Grid.prototype = {
+    addMines: function(count) {
+
+    },
+    // Execute a function once for each cell
+    each: function(fn) {
+      for(var i = 0; i < this.rows.length; i++) {
+        var row = this.rows[i];
+        for(var j = 0; j < row.length; j++) {
+          fn(this.rows[i][j]);
+        }
+      }
+    },
+    reduce: function(start, fn) {
+      var result = start
+
+      this.each(function(cell) {
+        result = fn(result, cell);
+      });
+
+      return result;
+    }
+  };
+
 })();

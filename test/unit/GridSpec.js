@@ -34,4 +34,30 @@ describe('Grid', function(){
     expect(botRightCell.row).toEqual(2);
     expect(botRightCell.column).toEqual(4);
   }));
+
+  it('should support #each', inject(function(Grid) {
+    var g = new Grid(1, 2);
+    var cells = [];
+
+    g.each(function(cell) {
+      cells.push(cell);
+    });
+
+    expect(cells.length).toEqual(2);
+    expect(cells[0].row).toEqual(0);
+    expect(cells[0].column).toEqual(0);
+    expect(cells[1].row).toEqual(0);
+    expect(cells[1].column).toEqual(1);
+  }));
+
+  it('should support #reduce', inject(function(Grid) {
+    var g = new Grid(2, 3);
+    var cells = [];
+
+    var result = g.reduce(0, function(total, cell) {
+      return total + 1;
+    });
+
+    expect(result).toEqual(6);
+  }));
 });
