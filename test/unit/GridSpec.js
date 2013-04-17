@@ -81,4 +81,12 @@ describe('Grid', function(){
 
     expect(mineCount).toEqual(6);
   }));
+
+  it('should not allow adding more mines than there are cells', inject(function(Grid) {
+    var g = new Grid(3, 5);
+
+    expect(function() {
+      g.addMines(16);
+    }).toThrow();
+  }));
 });

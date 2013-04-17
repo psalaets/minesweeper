@@ -38,6 +38,10 @@
 
   Grid.prototype = {
     addMines: function(count) {
+      if(count > this.width * this.height) {
+        throw new Error("Cannot add " + count + " mines. There are only " + (this.width * this.height) + " cells.");
+      }
+
       var minesLeft = count;
       while(minesLeft > 0) {
         var cell = this.randomCell();
