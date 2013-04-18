@@ -19,6 +19,16 @@
     this.adjacentMines = 0;
   }
 
+  Cell.prototype = {
+    visit: function() {
+      this.visited = true;
+      this.trigger('visited', this);
+    }
+  };
+
+  // Enable Cells to fire events
+  asEvented.call(Cell.prototype);
+
   function Grid(rowCount, columnCount) {
     this.rows = [];
     this.height = rowCount;
