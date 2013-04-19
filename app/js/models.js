@@ -23,6 +23,16 @@
     visit: function() {
       this.visited = true;
       this.trigger('visited', this);
+    },
+    cycleMarker: function() {
+      if(this.flagged) {
+        this.flagged = false;
+        this.marked = true;
+      } else if(this.marked) {
+        this.marked = false;
+      } else {
+        this.flagged = true;
+      }
     }
   };
 
