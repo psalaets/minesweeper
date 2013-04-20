@@ -1,5 +1,3 @@
-var G;
-
 (function() {
   angular.module('ms.models', [])
     .constant('Cell', Cell)
@@ -299,39 +297,6 @@ var G;
         row: cell.row,
         column: cell.column
       });
-    },
-    toString: function() {
-      var parts = [];
-
-      for(var i = 0; i < this.grid.height; i++) {
-        var row = '';
-
-        for(var j = 0; j < this.grid.width; j++) {
-          var cell = this.grid.getCell(i, j);
-          var letter = ' ';
-
-          if(cell.isFlagged()) {
-            letter = 'F';
-          } else if (cell.isBookmarked()) {
-            letter = '?';
-          } else if(cell.visited) {
-            letter = cell.countAdjacentMines();
-          }
-
-          row += '[ ' + letter +' ]'
-        }
-
-        parts.push(row);
-      }
-
-      return parts.join('\n');
-    },
-    visit: function(row, col) {
-      this.grid.getCell(row, col).visit();
-    },
-    flag: function(row, col) {
-      var cell = this.grid.getCell(row, col);
-      cell.isFlagged() ? cell.unflag() : cell.flag();
     }
   };
 
@@ -348,6 +313,4 @@ var G;
   Game.expert = function() {
     return new Game(30, 16, 99);
   };
-
-  G = Game;
 })();
