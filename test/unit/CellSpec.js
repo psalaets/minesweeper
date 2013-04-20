@@ -26,6 +26,81 @@ describe('Cell', function(){
     }));
   });
 
+  describe('#flag', function() {
+    it('should flag cell', inject(function(Cell) {
+      var c = new Cell();
+
+      c.flag();
+
+      expect(c.flagged).toBe(true);
+    }));
+
+    it('should fire change:flag event', inject(function(Cell) {
+      var c = new Cell();
+      var flaggedCell;
+
+      c.bind('change:flag', function(cell) {
+        flaggedCell = cell;
+      });
+
+      c.flag();
+
+      expect(flaggedCell).toBe(c);
+    }));
+
+    it('should not fire change:flag event if already flagged', inject(function(Cell) {
+      var c = new Cell();
+      c.flag();
+      var eventFired = false;
+
+      c.bind('change:flag', function() {
+        eventFired = true;
+      });
+
+      c.flag();
+
+      expect(eventFired).toBe(false);
+    }));
+  });
+
+  describe('#unflag', function() {
+    it('should unflag cell', inject(function(Cell) {
+      var c = new Cell();
+      c.flag();
+
+      c.unflag();
+
+      expect(c.flagged).toBe(false);
+    }));
+
+    it('should fire change:flag event', inject(function(Cell) {
+      var c = new Cell();
+      c.flag();
+      var unflaggedCell;
+
+      c.bind('change:flag', function(cell) {
+        unflaggedCell = cell;
+      });
+
+      c.unflag();
+
+      expect(unflaggedCell).toBe(c);
+    }));
+
+    it('should not fire change:flag event if already not flagged', inject(function(Cell) {
+      var c = new Cell();
+      var eventFired = false;
+
+      c.bind('change:flag', function() {
+        eventFired = true;
+      });
+
+      c.unflag();
+
+      expect(eventFired).toBe(false);
+    }));
+  });
+
   describe('#cycleMarker', function() {
     describe('Cell is not flagged, not marked', function() {
       it('should flag cell', inject(function(Cell) {

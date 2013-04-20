@@ -24,14 +24,29 @@
       this.visited = true;
       this.trigger('visited', this);
     },
+    flag: function() {
+      this.setFlag(true);
+    },
+    unflag: function() {
+      this.setFlag(false);
+    },
+    //private
+    setFlag: function(flagValue) {
+      var oldValue = this.flagged;
+      this.flagged = flagValue;
+
+      if(oldValue !== this.flagged) {
+        this.trigger('change:flag', this);
+      }
+    },
     cycleMarker: function() {
       if(this.flagged) {
-        this.flagged = false;
+        this.unflag();
         this.marked = true;
       } else if(this.marked) {
         this.marked = false;
       } else {
-        this.flagged = true;
+        this.flag();
       }
     }
   };
