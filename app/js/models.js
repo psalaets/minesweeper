@@ -10,12 +10,14 @@
     // Values: flag, bookmark, none
     this.marker = 'none';
 
+    // Neighbors keyed by relative direction (N, NW, etc)
+    // Not all cells have 8 neighbors (e.g. corner, edge cells)
+    this.neighbors = {};
+
     // Has a mine
     this.mined = false;
     // Player has gone to this cell
     this.visited = false;
-    // How many mined cells touch this cell, can be 0-8 inclusive
-    this.adjacentMines = 0;
   }
 
   Cell.prototype = {
@@ -61,6 +63,19 @@
       } else {
         this.flag();
       }
+    },
+    addNeighbor: function(location, neighbor) {
+      this.neighbors[location] = neighbor;
+    },
+    //count of adjacent cells with mines
+    getAdjacentMines: function() {
+      var count = 0;
+      for(var loc in this.neighbors) {
+        if(this.neighbors[loc].mined) {
+          count++;
+        }
+      }
+      return count;
     }
   };
 
@@ -82,6 +97,11 @@
 
       this.rows.push(row);
     }
+
+    var grid = this;
+    this.each(function(cell) {
+      grid.assignNeighbors(cell);
+    });
   }
 
   Grid.prototype = {
@@ -104,11 +124,6 @@
           minesLeft--;
         }
       }
-
-      var grid = this;
-      this.each(function(cell) {
-        grid.calculateAdjacentMines(cell);
-      });
     },
     randomCell: function() {
       //yoink http://stackoverflow.com/a/1527820
@@ -120,24 +135,26 @@
       var column = random(0, this.width - 1);
       return this.getCell(row, column);
     },
-    calculateAdjacentMines: function(cell) {
-      var adjacentMines = 0;
+    assignNeighbors: function(cell) {
+      // row/col offsets from cell by relative location
+      var offsets = {
+        NW: [-1, -1],
+        N:  [-1, 0],
+        NE: [-1, 1],
+        W:  [0, -1],
+        E:  [0, 1],
+        SW: [1, -1],
+        S:  [1, 0],
+        SE: [1, 1]
+      };
 
-      // row/col offsets from cell
-      var offsets = [
-        [-1, -1], [-1, 0], [-1, 1],
-        [0, -1],  /*cell*/ [0, 1],
-        [1, -1],  [1, 0],  [1, 1]
-      ];
-
-      offsets.forEach(function(offset) {
+      for(var loc in offsets) {
+        var offset = offsets[loc];
         var neighbor = this.getCell(cell.row + offset[0], cell.column + offset[1]);
-        if(neighbor && neighbor.mined) {
-          adjacentMines++;
+        if(neighbor) {
+          cell.addNeighbor(loc, neighbor);
         }
-      }, this);
-
-      cell.adjacentMines = adjacentMines;
+      }
     },
     getCell: function(row, col) {
       if(row >= this.height || row < 0) return undefined;

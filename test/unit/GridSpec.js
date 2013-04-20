@@ -20,7 +20,7 @@ describe('Grid', function(){
   it('should start cell numbering at top left', inject(function(Grid) {
     var g = new Grid(3, 5);
 
-    var topLeftCell = g.rows[0][0];
+    var topLeftCell = g.getCell(0, 0);
 
     expect(topLeftCell.row).toEqual(0);
     expect(topLeftCell.column).toEqual(0);
@@ -29,10 +29,44 @@ describe('Grid', function(){
   it('should end cell numbering at bottom right', inject(function(Grid) {
     var g = new Grid(3, 5);
 
-    var botRightCell = g.rows[2][4];
+    var botRightCell = g.getCell(2, 4);
 
     expect(botRightCell.row).toEqual(2);
     expect(botRightCell.column).toEqual(4);
+  }));
+
+  it("should assign neighbors to surrounded Cell", inject(function(Grid) {
+    var g = new Grid(3, 3);
+    var middle = g.getCell(1, 1);
+
+    expect(middle.neighbors.NW).toBe(g.getCell(0, 0));
+    expect(middle.neighbors.N).toBe(g.getCell(0, 1));
+    expect(middle.neighbors.NE).toBe(g.getCell(0, 2));
+    expect(middle.neighbors.W).toBe(g.getCell(1, 0));
+    expect(middle.neighbors.E).toBe(g.getCell(1, 2));
+    expect(middle.neighbors.SW).toBe(g.getCell(2, 0));
+    expect(middle.neighbors.S).toBe(g.getCell(2, 1));
+    expect(middle.neighbors.SE).toBe(g.getCell(2, 2));
+  }));
+
+  it("should assign neighbors to edge Cell", inject(function(Grid) {
+    var g = new Grid(3, 3);
+    var rightEdge = g.getCell(1, 2);
+
+    expect(rightEdge.neighbors.NW).toBe(g.getCell(0, 1));
+    expect(rightEdge.neighbors.N).toBe(g.getCell(0, 2));
+    expect(rightEdge.neighbors.W).toBe(g.getCell(1, 1));
+    expect(rightEdge.neighbors.SW).toBe(g.getCell(2, 1));
+    expect(rightEdge.neighbors.S).toBe(g.getCell(2, 2));
+  }));
+
+  it("should assign neighbors to corner Cell", inject(function(Grid) {
+    var g = new Grid(3, 3);
+    var bottomRight = g.getCell(2, 2);
+
+    expect(bottomRight.neighbors.NW).toBe(g.getCell(1, 1));
+    expect(bottomRight.neighbors.N).toBe(g.getCell(1, 2));
+    expect(bottomRight.neighbors.W).toBe(g.getCell(2, 1));
   }));
 
   it('should support #each', inject(function(Grid) {
@@ -132,22 +166,6 @@ describe('Grid', function(){
 
       var excluded = g.getCell(1, 2);
       expect(excluded.mined).toEqual(false);
-    }));
-
-    it('should figure out adjacent mines for all cells', inject(function(Grid) {
-      var g = new Grid(2, 2);
-
-      g.addMines(3, {row: 0, column: 0});
-
-      var topLeft = g.getCell(0, 0);
-      var topRight = g.getCell(0, 1);
-      var botLeft = g.getCell(1, 0);
-      var botRight = g.getCell(1, 1);
-
-      expect(topLeft.adjacentMines).toEqual(3);
-      expect(topRight.adjacentMines).toEqual(2);
-      expect(botLeft.adjacentMines).toEqual(2);
-      expect(botRight.adjacentMines).toEqual(2);
     }));
   });
 });

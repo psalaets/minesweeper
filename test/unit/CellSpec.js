@@ -3,6 +3,24 @@
 describe('Cell', function(){
   beforeEach(module('ms.models'));
 
+  it('should count adjacent mines from neighbors', inject(function(Cell) {
+      var c = new Cell();
+
+      var north = new Cell();
+      north.mined = true;
+
+      var south = new Cell();
+      south.mined = true;
+
+      var east = new Cell();
+
+      c.addNeighbor('N', north);
+      c.addNeighbor('S', south);
+      c.addNeighbor('E', east);
+
+      expect(c.getAdjacentMines()).toEqual(2);
+  }));
+
   describe('#visit', function() {
     it('should mark cell as visited', inject(function(Cell) {
       var c = new Cell();
