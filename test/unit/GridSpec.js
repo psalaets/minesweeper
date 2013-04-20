@@ -177,6 +177,21 @@ describe('Grid', function(){
     }));
   });
 
+  describe('#clearMines', function() {
+    it('should removed mines from all cells', inject(function(Grid) {
+      var g = new Grid(3, 5);
+      g.addMines(6);
+
+      g.clearMines();
+
+      var mineCount = g.reduce(0, function(total, cell) {
+        return total + (cell.mined ? 1 : 0);
+      });
+
+      expect(mineCount).toEqual(0);
+    }));
+  });
+
   describe('when Cell is visited', function() {
     it('should fire cellVisited event', inject(function(Grid) {
       var g = new Grid(2, 2);

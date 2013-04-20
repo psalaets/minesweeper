@@ -1,7 +1,8 @@
 (function() {
   angular.module('ms.models', [])
     .constant('Cell', Cell)
-    .constant('Grid', Grid);
+    .constant('Grid', Grid)
+    .constant('Game', Game);
 
   function Cell(row, column) {
     this.row = row;
@@ -67,15 +68,26 @@
     addNeighbor: function(location, neighbor) {
       this.neighbors[location] = neighbor;
     },
+    //neighbors as Array
+    getNeighbors: function() {
+      var neighbors = [];
+      for(var loc in this.neighbors) {
+        neighbors.push(this.neighbors[loc]);
+      }
+      return neighbors;
+    },
     //count of adjacent cells with mines
     getAdjacentMines: function() {
-      var count = 0;
-      for(var loc in this.neighbors) {
-        if(this.neighbors[loc].mined) {
-          count++;
+      return this.getNeighbors().reduce(function(total, neighbor) {
+        return total + (neighbor.mined ? 1 : 0);
+      }, 0);
+    },
+    visitUnminedNeighbors: function() {
+      this.getNeighbors().forEach(function(neighbor) {
+        if(!neighbor.mined && !neighbor.visited) {
+          neighbor.visit();
         }
-      }
-      return count;
+      });
     }
   };
 
@@ -131,6 +143,9 @@
         }
       }
     },
+    size: function() {
+      return this.width * this.height;
+    },
     addMines: function(count, exclude) {
       var maxMines = this.width * this.height;
       if(exclude) maxMines -= 1;
@@ -155,6 +170,11 @@
           minesLeft--;
         }
       }
+    },
+    clearMines: function() {
+      this.each(function(cell) {
+        cell.mined = false;
+      });
     },
     randomCell: function() {
       //yoink http://stackoverflow.com/a/1527820
@@ -208,10 +228,60 @@
       });
 
       return result;
+    },
+    findAll: function(fn) {
+      var found = [];
+
+      this.each(function(cell) {
+        if(fn(cell)) {
+          found.push(cell);
+        }
+      });
+
+      return found;
+    },
+    find: function(fn) {
+      return this.findAll(fn)[0] || null;
     }
   };
 
   // Enable Grids to fire events
   asEvented.call(Grid.prototype);
 
+  function Game(rows, columns, mines) {
+    this.grid = new Grid(rows, columns);
+    this.grid.addMines(mines);
+
+    this.visitsToWin = this.grid.size() - mines;
+    this.visits = 0;
+
+    var self = this;
+    this.grid.bind('cellVisited', function(cell) {
+      // If first visit is mined cell, move mines around so game can continue.
+      if(!self.visits && cell.mined) {
+        self.grid.clearMines();
+        self.grid.addMines(mines, {
+          row: cell.row,
+          column: cell.column
+        });
+      }
+
+      // From here down, process like a normal visit
+
+      self.visits++;
+
+      // Check for loss
+      if(cell.mined) {
+        self.trigger('lose');
+      } else if(self.visits === self.visitsToWin) { // Check for win
+        self.trigger('win')
+      } else {
+        cell.visitUnminedNeighbors();
+      }
+    });
+  }
+
+  Game.prototype = {};
+
+  asEvented.call(Game.prototype);
 })();

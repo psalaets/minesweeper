@@ -21,6 +21,22 @@ describe('Cell', function(){
       expect(c.getAdjacentMines()).toEqual(2);
   }));
 
+  it('should provide access to neighbors as Array', inject(function(Cell) {
+      var c = new Cell();
+
+      var north = new Cell();
+      var south = new Cell();
+      var east = new Cell();
+
+      c.addNeighbor('N', north);
+      c.addNeighbor('S', south);
+      c.addNeighbor('E', east);
+
+      expect(c.getNeighbors()).toContain(north);
+      expect(c.getNeighbors()).toContain(south);
+      expect(c.getNeighbors()).toContain(east);
+  }));
+
   describe('#visit', function() {
     it('should mark cell as visited', inject(function(Cell) {
       var c = new Cell();
