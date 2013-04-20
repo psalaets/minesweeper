@@ -311,6 +311,6 @@
   };
 
   Game.expert = function() {
-    return new Game(30, 16, 99);
+    return new Game(16, 30, 99);
   };
 })();
