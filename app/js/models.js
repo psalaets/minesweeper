@@ -242,6 +242,11 @@
     },
     find: function(fn) {
       return this.findAll(fn)[0] || null;
+    },
+    getTotalMines: function() {
+      return this.reduce(0, function(total, cell) {
+        return total + (cell.mined ? 1 : 0);
+      });
     }
   };
 
@@ -259,29 +264,50 @@
     this.grid.bind('cellVisited', function(cell) {
       // If first visit is mined cell, move mines around so game can continue.
       if(!self.visits && cell.mined) {
-        self.grid.clearMines();
-        self.grid.addMines(mines, {
-          row: cell.row,
-          column: cell.column
-        });
+        self.ensureNoMine(cell);
       }
 
       // From here down, process like a normal visit
-
-      self.visits++;
-
-      // Check for loss
-      if(cell.mined) {
-        self.trigger('lose');
-      } else if(self.visits === self.visitsToWin) { // Check for win
-        self.trigger('win')
-      } else {
-        cell.visitUnminedNeighbors();
-      }
+      self.cellVisited(cell);
     });
   }
 
-  Game.prototype = {};
+  Game.prototype = {
+    cellVisited: function(cell) {
+      this.visits++;
+
+      // Check for loss
+      if(cell.mined) {
+        this.trigger('lose');
+      } else if(this.visits === this.visitsToWin) { // Check for win
+        this.trigger('win')
+      } else {
+        cell.visitUnminedNeighbors();
+      }
+    },
+    ensureNoMine: function(cell) {
+      var grid = this.grid;
+      var mines = grid.getTotalMines();
+
+      grid.clearMines();
+      grid.addMines(mines, {
+        row: cell.row,
+        column: cell.column
+      });
+    }
+  };
 
   asEvented.call(Game.prototype);
+
+  Game.beginner = function() {
+    return new Game(8, 8, 10);
+  };
+
+  Game.intermediate = function() {
+    return new Game(16, 16, 40);
+  };
+
+  Game.expert = function() {
+    return new Game(30, 16, 99);
+  };
 })();

@@ -144,11 +144,7 @@ describe('Grid', function(){
 
       g.addMines(6);
 
-      var mineCount = g.reduce(0, function(total, cell) {
-        return total + (cell.mined ? 1 : 0);
-      });
-
-      expect(mineCount).toEqual(6);
+      expect(g.getTotalMines()).toEqual(6);
     }));
 
     it('should not allow adding more mines than mineable cells', inject(function(Grid) {
@@ -184,11 +180,7 @@ describe('Grid', function(){
 
       g.clearMines();
 
-      var mineCount = g.reduce(0, function(total, cell) {
-        return total + (cell.mined ? 1 : 0);
-      });
-
-      expect(mineCount).toEqual(0);
+      expect(g.getTotalMines()).toEqual(0);
     }));
   });
 
