@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('myApp', ['ms.models']);
+angular.module('ms', ['ms.models']);
