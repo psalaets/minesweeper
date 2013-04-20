@@ -1,11 +1,16 @@
 /* app css stylesheet */
 
-.grid .cell {
+.cell {
   width: 20px;
   height: 20px;
   text-align: center;
   padding: 0;
   border: 1px solid #000;
+  background-color: #bbb;
+}
+
+.cell.visited {
+ background-color: #eee;
 }
 
 .grid {
