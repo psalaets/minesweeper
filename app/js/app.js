@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('ms', ['ms.models']);
+angular.module('ms', ['ms.models', 'ms.controllers', 'ms.filters']);

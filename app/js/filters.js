@@ -2,9 +2,11 @@
 
 /* Filters */
 
-angular.module('myApp.filters', []).
-  filter('interpolate', ['version', function(version) {
-    return function(text) {
-      return String(text).replace(/\%VERSION\%/mg, version);
+angular.module('ms.filters', []).
+  filter('adjacentMines', function() {
+    return function(cell) {
+      if(cell.visited) {
+        return cell.countAdjacentMines() || null;
+      }
     }
-  }]);
+  });
