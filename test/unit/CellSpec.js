@@ -32,14 +32,14 @@ describe('Cell', function(){
 
       c.flag();
 
-      expect(c.flagged).toBe(true);
+      expect(c.isFlagged()).toBe(true);
     }));
 
-    it('should fire change:flag event', inject(function(Cell) {
+    it('should fire change:marker event', inject(function(Cell) {
       var c = new Cell();
       var flaggedCell;
 
-      c.bind('change:flag', function(cell) {
+      c.bind('change:marker', function(cell) {
         flaggedCell = cell;
       });
 
@@ -48,12 +48,12 @@ describe('Cell', function(){
       expect(flaggedCell).toBe(c);
     }));
 
-    it('should not fire change:flag event if already flagged', inject(function(Cell) {
+    it('should not fire change:marker event if already flagged', inject(function(Cell) {
       var c = new Cell();
       c.flag();
       var eventFired = false;
 
-      c.bind('change:flag', function() {
+      c.bind('change:marker', function() {
         eventFired = true;
       });
 
@@ -70,15 +70,15 @@ describe('Cell', function(){
 
       c.unflag();
 
-      expect(c.flagged).toBe(false);
+      expect(c.isFlagged()).toBe(false);
     }));
 
-    it('should fire change:flag event', inject(function(Cell) {
+    it('should fire change:marker event', inject(function(Cell) {
       var c = new Cell();
       c.flag();
       var unflaggedCell;
 
-      c.bind('change:flag', function(cell) {
+      c.bind('change:marker', function(cell) {
         unflaggedCell = cell;
       });
 
@@ -87,11 +87,11 @@ describe('Cell', function(){
       expect(unflaggedCell).toBe(c);
     }));
 
-    it('should not fire change:flag event if already not flagged', inject(function(Cell) {
+    it('should not fire change:marker event if already not flagged', inject(function(Cell) {
       var c = new Cell();
       var eventFired = false;
 
-      c.bind('change:flag', function() {
+      c.bind('change:marker', function() {
         eventFired = true;
       });
 
@@ -107,14 +107,14 @@ describe('Cell', function(){
 
       c.bookmark();
 
-      expect(c.bookmarked).toBe(true);
+      expect(c.isBookmarked()).toBe(true);
     }));
 
-    it('should fire change:bookmark event', inject(function(Cell) {
+    it('should fire change:marker event', inject(function(Cell) {
       var c = new Cell();
       var bookmarkedCell;
 
-      c.bind('change:bookmark', function(cell) {
+      c.bind('change:marker', function(cell) {
         bookmarkedCell = cell;
       });
 
@@ -123,12 +123,12 @@ describe('Cell', function(){
       expect(bookmarkedCell).toBe(c);
     }));
 
-    it('should not fire change:bookmark event if already bookmarked', inject(function(Cell) {
+    it('should not fire change:marker event if already bookmarked', inject(function(Cell) {
       var c = new Cell();
       c.bookmark();
       var eventFired = false;
 
-      c.bind('change:bookmark', function() {
+      c.bind('change:marker', function() {
         eventFired = true;
       });
 
@@ -145,15 +145,15 @@ describe('Cell', function(){
 
       c.unbookmark();
 
-      expect(c.bookmarked).toBe(false);
+      expect(c.isBookmarked()).toBe(false);
     }));
 
-    it('should fire change:bookmark event', inject(function(Cell) {
+    it('should fire change:marker event', inject(function(Cell) {
       var c = new Cell();
       c.bookmark();
       var unbookmarkedCell;
 
-      c.bind('change:bookmark', function(cell) {
+      c.bind('change:marker', function(cell) {
         unbookmarkedCell = cell;
       });
 
@@ -162,11 +162,11 @@ describe('Cell', function(){
       expect(unbookmarkedCell).toBe(c);
     }));
 
-    it('should not fire change:bookmark event if not already bookmarked', inject(function(Cell) {
+    it('should not fire change:marker event if not already bookmarked', inject(function(Cell) {
       var c = new Cell();
       var eventFired = false;
 
-      c.bind('change:bookmark', function() {
+      c.bind('change:marker', function() {
         eventFired = true;
       });
 
@@ -183,30 +183,30 @@ describe('Cell', function(){
 
         c.cycleMarker();
 
-        expect(c.flagged).toBe(true);
+        expect(c.isFlagged()).toBe(true);
       }));
     });
 
     describe('Cell is flagged', function() {
       it('should bookmark cell and unflag cell', inject(function(Cell) {
         var c = new Cell();
-        c.flagged = true;
+        c.flag();
 
         c.cycleMarker();
 
-        expect(c.bookmarked).toBe(true);
-        expect(c.flagged).toBe(false);
+        expect(c.isBookmarked()).toBe(true);
+        expect(c.isFlagged()).toBe(false);
       }));
     });
 
     describe('Cell is bookmarked', function() {
       it('should unbookmark cell', inject(function(Cell) {
         var c = new Cell();
-        c.marked = true;
+        c.bookmark();
 
         c.cycleMarker();
 
-        expect(c.bookmarked).toBe(false);
+        expect(c.isBookmarked()).toBe(false);
       }));
     });
   });

@@ -7,10 +7,9 @@
     this.row = row;
     this.column = column;
 
-    // Flagged as a mine
-    this.flagged = false;
-    // Marked as "come back later"
-    this.bookmarked = false;
+    // Values: flag, bookmark, none
+    this.marker = 'none';
+
     // Has a mine
     this.mined = false;
     // Player has gone to this cell
@@ -25,39 +24,39 @@
       this.trigger('visited', this);
     },
     flag: function() {
-      this.setFlag(true);
+      this.setMarker('flag');
     },
     unflag: function() {
-      this.setFlag(false);
+      this.clearMarker();
     },
-    //private
-    setFlag: function(flagValue) {
-      var oldValue = this.flagged;
-      this.flagged = flagValue;
+    isFlagged: function() {
+      return this.marker === 'flag';
+    },
+    setMarker:function(marker) {
+      var oldValue = this.marker;
+      this.marker = marker;
 
-      if(oldValue !== this.flagged) {
-        this.trigger('change:flag', this);
+      if(oldValue !== this.marker) {
+        this.trigger('change:marker', this);
       }
+    },
+    clearMarker: function() {
+      this.setMarker('none');
     },
     bookmark: function() {
-      this.setBookmark(true);
+      this.setMarker('bookmark');
     },
     unbookmark: function() {
-      this.setBookmark(false);
+      this.clearMarker();
     },
-    setBookmark: function(value) {
-      var oldMark = this.bookmarked;
-      this.bookmarked = value;
-
-      if(oldMark !== this.bookmarked) {
-        this.trigger('change:bookmark', this);
-      }
+    isBookmarked: function() {
+      return this.marker === 'bookmark';
     },
     cycleMarker: function() {
-      if(this.flagged) {
+      if(this.isFlagged()) {
         this.unflag();
         this.bookmark();
-      } else if(this.bookmarked) {
+      } else if(this.isBookmarked()) {
         this.unbookmark();
       } else {
         this.flag();
