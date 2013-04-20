@@ -36,21 +36,35 @@ describe('Game', function(){
       expect(loseFired).toBe(true);
     }));
 
-    it('should recursively visit all adjacent unmined cells', inject(function(Game) {
-      var g = new Game(2, 2, 1);
+    it('should recursively visit all neighbor cells with no adjacent mines', inject(function(Game) {
+      var g = new Game(3, 3, 1);
+      // ugly hack so we control where mine is
+      g.grid.clearMines();
+      g.grid.getCell(2, 2).mined = true;
+
       g.grid.getCell(0, 0).visit();
 
-      var unmined = g.grid.findAll(function(cell) { return !cell.mined; });
+      var center = g.grid.getCell(1, 1);
 
-      expect(unmined.length).toEqual(3);
-      for(var i = 0; i < unmined.length; i++) {
-        expect(unmined[i].visited).toBe(true);
-      }
+      expect(center.neighbors.NW.visited).toBe(true);
+      expect(center.neighbors.N.visited).toBe(true);
+      expect(center.neighbors.NE.visited).toBe(true);
+      expect(center.neighbors.W.visited).toBe(true);
+      expect(center.neighbors.SW.visited).toBe(true);
+
+      expect(center.visited).toBe(false);
+      expect(center.neighbors.E.visited).toBe(false);
+      expect(center.neighbors.SE.visited).toBe(false);
+      expect(center.neighbors.S.visited).toBe(false);
     }));
   });
 
   it('should fire win event once all unmined cells are visited', inject(function(Game) {
-      var g = new Game(2, 2, 1);
+      var g = new Game(3, 3, 1);
+      // ugly hack so we control where mine is
+      g.grid.clearMines();
+      g.grid.getCell(2, 2).mined = true;
+
       var winFired = false;
 
       g.bind('win', function() {
@@ -58,6 +72,10 @@ describe('Game', function(){
       });
 
       g.grid.getCell(0, 0).visit();
+      g.grid.getCell(1, 0).visit();
+      g.grid.getCell(2, 0).visit();
+      g.grid.getCell(0, 1).visit();
+      g.grid.getCell(0, 2).visit();
 
       expect(winFired).toBe(true);
   }));

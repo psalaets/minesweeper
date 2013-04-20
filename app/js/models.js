@@ -83,13 +83,6 @@ var G;
       return this.getNeighbors().reduce(function(total, neighbor) {
         return total + (neighbor.mined ? 1 : 0);
       }, 0);
-    },
-    visitUnminedNeighbors: function() {
-      this.getNeighbors().forEach(function(neighbor) {
-        if(!neighbor.mined && !neighbor.visited) {
-          neighbor.visit();
-        }
-      });
     }
   };
 
@@ -284,7 +277,17 @@ var G;
       } else if(this.visits === this.visitsToWin) { // Check for win
         this.trigger('win')
       } else {
-        cell.visitUnminedNeighbors();
+        this.cascadeVisits(cell);
+      }
+    },
+    // From http://www.techuser.net/minecascade.html
+    cascadeVisits: function(cell) {
+      if(!cell.countAdjacentMines()) {
+        cell.getNeighbors().forEach(function(neighbor) {
+          if(!neighbor.visited && !neighbor.countAdjacentMines()) {
+            neighbor.visit();
+          }
+        });
       }
     },
     ensureNoMine: function(cell) {

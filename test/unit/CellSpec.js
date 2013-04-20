@@ -32,9 +32,10 @@ describe('Cell', function(){
       c.addNeighbor('S', south);
       c.addNeighbor('E', east);
 
-      expect(c.getNeighbors()).toContain(north);
-      expect(c.getNeighbors()).toContain(south);
-      expect(c.getNeighbors()).toContain(east);
+      var neighbors = c.getNeighbors();
+      expect(neighbors).toContain(north);
+      expect(neighbors).toContain(south);
+      expect(neighbors).toContain(east);
   }));
 
   describe('#visit', function() {
