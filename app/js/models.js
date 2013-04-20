@@ -10,7 +10,7 @@
     // Flagged as a mine
     this.flagged = false;
     // Marked as "come back later"
-    this.marked = false;
+    this.bookmarked = false;
     // Has a mine
     this.mined = false;
     // Player has gone to this cell
@@ -39,26 +39,26 @@
         this.trigger('change:flag', this);
       }
     },
-    mark: function() {
-      this.setMark(true);
+    bookmark: function() {
+      this.setBookmark(true);
     },
-    unmark: function() {
-      this.setMark(false);
+    unbookmark: function() {
+      this.setBookmark(false);
     },
-    setMark: function(value) {
-      var oldMark = this.marked;
-      this.marked = value;
+    setBookmark: function(value) {
+      var oldMark = this.bookmarked;
+      this.bookmarked = value;
 
-      if(oldMark !== this.marked) {
-        this.trigger('change:mark', this);
+      if(oldMark !== this.bookmarked) {
+        this.trigger('change:bookmark', this);
       }
     },
     cycleMarker: function() {
       if(this.flagged) {
         this.unflag();
-        this.mark();
-      } else if(this.marked) {
-        this.unmark();
+        this.bookmark();
+      } else if(this.bookmarked) {
+        this.unbookmark();
       } else {
         this.flag();
       }
