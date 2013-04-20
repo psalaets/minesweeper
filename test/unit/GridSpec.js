@@ -35,7 +35,7 @@ describe('Grid', function(){
     expect(botRightCell.column).toEqual(4);
   }));
 
-  it("should assign neighbors to surrounded Cell", inject(function(Grid) {
+  it("should assign neighbors to landlocked Cell", inject(function(Grid) {
     var g = new Grid(3, 3);
     var middle = g.getCell(1, 1);
 
