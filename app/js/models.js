@@ -284,7 +284,7 @@ var G;
     cascadeVisits: function(cell) {
       if(!cell.countAdjacentMines()) {
         cell.getNeighbors().forEach(function(neighbor) {
-          if(!neighbor.visited && !neighbor.countAdjacentMines()) {
+          if(!neighbor.visited && !neighbor.mined) {
             neighbor.visit();
           }
         });

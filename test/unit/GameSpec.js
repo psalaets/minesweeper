@@ -40,7 +40,7 @@ describe('Game', function(){
       var g = new Game(3, 3, 1);
       // ugly hack so we control where mine is
       g.grid.clearMines();
-      g.grid.getCell(2, 2).mined = true;
+      g.grid.getCell(1, 2).mined = true;
 
       g.grid.getCell(0, 0).visit();
 
@@ -48,14 +48,15 @@ describe('Game', function(){
 
       expect(center.neighbors.NW.visited).toBe(true);
       expect(center.neighbors.N.visited).toBe(true);
-      expect(center.neighbors.NE.visited).toBe(true);
-      expect(center.neighbors.W.visited).toBe(true);
-      expect(center.neighbors.SW.visited).toBe(true);
+      expect(center.neighbors.NE.visited).toBe(false);
 
-      expect(center.visited).toBe(false);
+      expect(center.neighbors.W.visited).toBe(true);
+      expect(center.visited).toBe(true);
       expect(center.neighbors.E.visited).toBe(false);
+
+      expect(center.neighbors.SW.visited).toBe(true);
+      expect(center.neighbors.S.visited).toBe(true);
       expect(center.neighbors.SE.visited).toBe(false);
-      expect(center.neighbors.S.visited).toBe(false);
     }));
   });
 
