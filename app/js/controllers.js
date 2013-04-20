@@ -1,23 +1,25 @@
 'use strict';
 
-/* Controllers */
-
-angular.module('ms.controllers', ['ms.models']).
-  controller('SetupController', ['$scope', function($scope) {
-
+angular.module('ms.controllers', ['ms.models', 'ms.services']).
+  controller('SetupController', ['$scope', 'Game', 'GameHolder', '$location', function($scope, Game, gameHolder, $location) {
+    ['beginner', 'intermediate', 'expert'].forEach(function(difficulty) {
+      $scope[difficulty] = function() {
+        gameHolder.setGame(Game[difficulty]());
+        $location.path('/game');
+      }
+    });
   }]).
-  controller('GameController', ['$scope', 'Game', function($scope, Game) {
-    var g = Game.beginner();
+  controller('GameController', ['$scope', 'GameHolder', function($scope, gameHolder) {
+    var game = gameHolder.getGame();
 
-    $scope.game = g;
-
+    $scope.game = game;
     $scope.status = 'playing';
 
-    g.bind('win', function() {
+    game.bind('win', function() {
       $scope.status = 'win!';
     });
 
-    g.bind('lose', function() {
+    game.bind('lose', function() {
       $scope.status = 'lose';
     });
 
@@ -30,8 +32,6 @@ angular.module('ms.controllers', ['ms.models']).
     $scope.cycleMarker = function(cell) {
       if(!cell.visited) {
         cell.cycleMarker();
-
-        console.log('just cycled, cell marker is now: ' + cell.marker)
       }
     };
   }]);
