@@ -168,4 +168,107 @@ describe('Grid', function(){
       expect(excluded.mined).toEqual(false);
     }));
   });
+
+  describe('when Cell is visited', function() {
+    it('should fire cellVisited event', inject(function(Grid) {
+      var g = new Grid(2, 2);
+      var visited;
+
+      g.bind('cellVisited', function(cell) {
+        visited = cell;
+      });
+
+      g.getCell(0, 0).visit();
+
+      expect(visited).toBe(g.getCell(0, 0));
+    }));
+  });
+
+  describe('when Cell is flagged', function() {
+    it('should fire cellFlagged event', inject(function(Grid) {
+      var g = new Grid(2, 2);
+      var flagged;
+
+      g.bind('cellFlagged', function(cell) {
+        flagged = cell;
+      });
+
+      g.getCell(0, 0).flag();
+
+      expect(flagged).toBe(g.getCell(0, 0));
+    }));
+  });
+
+  describe('when Cell is unflagged', function() {
+    it('should fire cellUnflagged event', inject(function(Grid) {
+      var g = new Grid(2, 2);
+      g.getCell(0, 0).flag();
+      var unflagged;
+
+      g.bind('cellUnflagged', function(cell) {
+        unflagged = cell;
+      });
+
+      g.getCell(0, 0).unflag();
+
+      expect(unflagged).toBe(g.getCell(0, 0));
+    }));
+  });
+
+  describe('when Cell is bookmarked', function() {
+    it('should fire cellBookmarked event', inject(function(Grid) {
+      var g = new Grid(2, 2);
+      var bookmarked;
+
+      g.bind('cellBookmarked', function(cell) {
+        bookmarked = cell;
+      });
+
+      g.getCell(0, 0).bookmark();
+
+      expect(bookmarked).toBe(g.getCell(0, 0));
+    }));
+  });
+
+  describe('when Cell is unbookmarked', function() {
+    it('should fire cellUnbookmarked event', inject(function(Grid) {
+      var g = new Grid(2, 2);
+      g.getCell(0, 0).bookmark();
+      var unbookmarked;
+
+      g.bind('cellUnbookmarked', function(cell) {
+        unbookmarked = cell;
+      });
+
+      g.getCell(0, 0).unbookmark();
+
+      expect(unbookmarked).toBe(g.getCell(0, 0));
+    }));
+  });
+
+  describe('when Cell has marker cycled', function() {
+    it('should fire events in correct order', inject(function(Grid) {
+      var g = new Grid(1, 1);
+      var recordedEvents = [];
+
+      var events = 'cellFlagged cellUnflagged cellBookmarked cellUnbookmarked';
+      events.split(' ').forEach(function(event) {
+        g.bind(event, function() {
+          recordedEvents.push(event);
+        });
+      });
+
+      var cell = g.getCell(0, 0);
+      cell.cycleMarker();
+      cell.cycleMarker();
+      cell.cycleMarker();
+
+      expect(recordedEvents).toEqual([
+        'cellFlagged',
+        'cellUnflagged',
+        'cellBookmarked',
+        'cellUnbookmarked'
+      ]);
+    }));
+  });
 });

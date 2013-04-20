@@ -39,7 +39,7 @@
       this.marker = marker;
 
       if(oldValue !== this.marker) {
-        this.trigger('change:marker', this);
+        this.trigger('change:marker', this, oldValue);
       }
     },
     clearMarker: function() {
@@ -101,10 +101,36 @@
     var grid = this;
     this.each(function(cell) {
       grid.assignNeighbors(cell);
+
+      // Listen for visits to each Cell
+      cell.bind('visited', function(cell) {
+        grid.cellVisited(cell);
+      });
+
+      // Listen for marker changes on each Cell
+      cell.bind('change:marker', function(cell, oldMarker) {
+        grid.cellMarkerChanged(cell, oldMarker);
+      });
     });
   }
 
   Grid.prototype = {
+    cellVisited: function(cell) {
+      this.trigger('cellVisited', cell);
+    },
+    cellMarkerChanged: function(cell, oldMarker) {
+      if(cell.isFlagged()) {
+        this.trigger('cellFlagged', cell);
+      } else if(cell.isBookmarked()) {
+        this.trigger('cellBookmarked', cell);
+      } else {
+        if(oldMarker === 'flag') {
+          this.trigger('cellUnflagged', cell);
+        } else if(oldMarker === 'bookmark') {
+          this.trigger('cellUnbookmarked', cell);
+        }
+      }
+    },
     addMines: function(count, exclude) {
       var maxMines = (this.width * this.height) - 1;
       if(count > maxMines) {
@@ -179,5 +205,8 @@
       return result;
     }
   };
+
+  // Enable Grids to fire events
+  asEvented.call(Grid.prototype);
 
 })();
