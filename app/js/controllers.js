@@ -22,6 +22,16 @@ angular.module('ms.controllers', ['ms.models']).
     });
 
     $scope.visit = function(cell) {
-      cell.visit();
+      if(!cell.visited && !cell.isFlagged() && !cell.isBookmarked()) {
+        cell.visit();
+      }
+    };
+
+    $scope.cycleMarker = function(cell) {
+      if(!cell.visited) {
+        cell.cycleMarker();
+
+        console.log('just cycled, cell marker is now: ' + cell.marker)
+      }
     };
   }]);

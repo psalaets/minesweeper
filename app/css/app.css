@@ -13,6 +13,10 @@
  background-color: #eee;
 }
 
+.cell .flagged {
+  color: #d00;
+}
+
 .grid {
   margin: 0 auto;
 }

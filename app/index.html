@@ -11,8 +11,14 @@
 
     <table class="grid">
       <tr ng-repeat="row in game.grid.rows">
-        <td class="cell" ng-class="{visited: cell.visited}" ng-click="visit(cell)" ng-repeat="cell in row">
-          <span ng-hide="!cell.visited">{{cell | adjacentMines}}<span>
+        <td class="cell"
+            ng-class="{visited: cell.visited}"
+            ng-click="visit(cell)"
+            ng-right-click="cycleMarker(cell)"
+            ng-repeat="cell in row">
+          <span ng-show="cell.visited">{{cell | visitedStatus}}</span>
+          <span ng-class="{flagged: cell.isFlagged()}"
+                ng-hide="cell.visited">{{cell | unvisitedStatus}}</span>
         </td>
       </div>
     </div>

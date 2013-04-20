@@ -3,10 +3,21 @@
 /* Filters */
 
 angular.module('ms.filters', []).
-  filter('adjacentMines', function() {
+  filter('visitedStatus', function() {
     return function(cell) {
-      if(cell.visited) {
+      if(cell.mined) {
+        return ":(";
+      } else {
         return cell.countAdjacentMines() || null;
       }
-    }
+    };
+  }).
+  filter('unvisitedStatus', function() {
+    return function(cell) {
+      if(cell.isFlagged()) {
+        return "F";
+      } else if(cell.isBookmarked()) {
+        return "?";
+      }
+    };
   });
