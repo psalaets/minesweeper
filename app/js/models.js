@@ -132,10 +132,15 @@
       }
     },
     addMines: function(count, exclude) {
-      var maxMines = (this.width * this.height) - 1;
+      var maxMines = this.width * this.height;
+      if(exclude) maxMines -= 1;
+
       if(count > maxMines) {
         throw new Error("Cannot add " + count + " mines. There are only " + maxMines + " mine-able cells.");
       }
+
+      // Make sure exclude is *something*
+      exclude = exclude || {row: -1, column: -1};
 
       function isMineable(cell) {
         return !cell.mined &&

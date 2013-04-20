@@ -142,7 +142,7 @@ describe('Grid', function(){
     it('should add mines to cells', inject(function(Grid) {
       var g = new Grid(3, 5);
 
-      g.addMines(6, {row: 1, column: 2});
+      g.addMines(6);
 
       var mineCount = g.reduce(0, function(total, cell) {
         return total + (cell.mined ? 1 : 0);
@@ -155,7 +155,7 @@ describe('Grid', function(){
       var g = new Grid(3, 5);
 
       expect(function() {
-        g.addMines(15, {row: 1, column: 2});
+        g.addMines(16);
       }).toThrow();
     }));
 
@@ -166,6 +166,14 @@ describe('Grid', function(){
 
       var excluded = g.getCell(1, 2);
       expect(excluded.mined).toEqual(false);
+    }));
+
+    it('should take excluded cell into account re: max mines', inject(function(Grid) {
+      var g = new Grid(3, 3);
+
+      expect(function() {
+        g.addMines(9, {row: 1, column: 2});
+      }).toThrow();
     }));
   });
 
