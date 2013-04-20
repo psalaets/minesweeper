@@ -39,12 +39,26 @@
         this.trigger('change:flag', this);
       }
     },
+    mark: function() {
+      this.setMark(true);
+    },
+    unmark: function() {
+      this.setMark(false);
+    },
+    setMark: function(value) {
+      var oldMark = this.marked;
+      this.marked = value;
+
+      if(oldMark !== this.marked) {
+        this.trigger('change:mark', this);
+      }
+    },
     cycleMarker: function() {
       if(this.flagged) {
         this.unflag();
-        this.marked = true;
+        this.mark();
       } else if(this.marked) {
-        this.marked = false;
+        this.unmark();
       } else {
         this.flag();
       }

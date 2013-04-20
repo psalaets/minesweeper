@@ -101,6 +101,81 @@ describe('Cell', function(){
     }));
   });
 
+  describe('#mark', function() {
+    it('should mark cell', inject(function(Cell) {
+      var c = new Cell();
+
+      c.mark();
+
+      expect(c.marked).toBe(true);
+    }));
+
+    it('should fire change:mark event', inject(function(Cell) {
+      var c = new Cell();
+      var markedCell;
+
+      c.bind('change:mark', function(cell) {
+        markedCell = cell;
+      });
+
+      c.mark();
+
+      expect(markedCell).toBe(c);
+    }));
+
+    it('should not fire change:mark event if already marked', inject(function(Cell) {
+      var c = new Cell();
+      c.mark();
+      var eventFired = false;
+
+      c.bind('change:mark', function() {
+        eventFired = true;
+      });
+
+      c.mark();
+
+      expect(eventFired).toBe(false);
+    }));
+  });
+
+  describe('#unmark', function() {
+    it('should unmark cell', inject(function(Cell) {
+      var c = new Cell();
+      c.mark();
+
+      c.unmark();
+
+      expect(c.marked).toBe(false);
+    }));
+
+    it('should fire change:mark event', inject(function(Cell) {
+      var c = new Cell();
+      c.mark();
+      var unmarkedCell;
+
+      c.bind('change:mark', function(cell) {
+        unmarkedCell = cell;
+      });
+
+      c.unmark();
+
+      expect(unmarkedCell).toBe(c);
+    }));
+
+    it('should not fire change:mark event if not already marked', inject(function(Cell) {
+      var c = new Cell();
+      var eventFired = false;
+
+      c.bind('change:mark', function() {
+        eventFired = true;
+      });
+
+      c.unmark();
+
+      expect(eventFired).toBe(false);
+    }));
+  });
+
   describe('#cycleMarker', function() {
     describe('Cell is not flagged, not marked', function() {
       it('should flag cell', inject(function(Cell) {
