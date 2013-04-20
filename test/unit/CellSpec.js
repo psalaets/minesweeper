@@ -18,7 +18,7 @@ describe('Cell', function(){
       c.addNeighbor('S', south);
       c.addNeighbor('E', east);
 
-      expect(c.getAdjacentMines()).toEqual(2);
+      expect(c.countAdjacentMines()).toEqual(2);
   }));
 
   it('should provide access to neighbors as Array', inject(function(Cell) {

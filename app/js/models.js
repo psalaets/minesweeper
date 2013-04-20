@@ -79,7 +79,7 @@ var G;
       return neighbors;
     },
     //count of adjacent cells with mines
-    getAdjacentMines: function() {
+    countAdjacentMines: function() {
       return this.getNeighbors().reduce(function(total, neighbor) {
         return total + (neighbor.mined ? 1 : 0);
       }, 0);
@@ -312,7 +312,7 @@ var G;
           } else if (cell.isBookmarked()) {
             letter = '?';
           } else if(cell.visited) {
-            letter = cell.getAdjacentMines();
+            letter = cell.countAdjacentMines();
           }
 
           row += '[ ' + letter +' ]'
