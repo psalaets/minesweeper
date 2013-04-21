@@ -250,6 +250,8 @@
     this.grid = new Grid(rows, columns);
     this.grid.addMines(mines);
 
+    this.expectedFlags = mines;
+
     this.visitsToWin = this.grid.size() - mines;
     this.visits = 0;
 
@@ -262,6 +264,14 @@
 
       // From here down, process like a normal visit
       self.cellVisited(cell);
+    });
+
+    this.grid.bind('cellFlagged', function() {
+      self.expectedFlags--;
+    });
+
+    this.grid.bind('cellUnflagged', function() {
+      self.expectedFlags++;
     });
   }
 

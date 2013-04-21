@@ -80,4 +80,17 @@ describe('Game', function(){
 
       expect(winFired).toBe(true);
   }));
+
+  it('should track how many more flags are expected', inject(function(Game) {
+    var g = new Game(3, 3, 3);
+
+    g.grid.getCell(0, 0).flag();
+    g.grid.getCell(1, 0).flag();
+
+    expect(g.expectedFlags).toEqual(1);
+
+    g.grid.getCell(0, 0).unflag();
+
+    expect(g.expectedFlags).toEqual(2);
+  }));
 });
