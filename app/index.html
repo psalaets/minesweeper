@@ -8,16 +8,22 @@
 <body>
   <div ng-view></div>
 
+  <script type="text/ng-template" id="startGameLinks">
+    <a ng-href="#setup/beginner">Beginner</a>
+    <a ng-href="#setup/intermediate">Intermediate</a>
+    <a ng-href="#setup/expert">Expert</a>
+  </script>
+
   <script type="text/ng-template" id="setupTemplate">
     <div>
-      <button ng-click="beginner()">Beginner</button>
-      <button ng-click="intermediate()">Intermediate</button>
-      <button ng-click="expert()">Expert</button>
+      <div ng-include="'startGameLinks'"></div>
     </div>
   </script>
 
   <script type="text/ng-template" id="gameTemplate">
     <div>
+      <div ng-include="'startGameLinks'"></div>
+
       {{status}} - {{game.expectedFlags}}
 
       <table class="grid">
