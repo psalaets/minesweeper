@@ -1,13 +1,18 @@
 'use strict';
 
 angular.module('ms.controllers', ['ms.models', 'ms.services']).
-  controller('SetupController', ['$scope', 'GameService', '$location', function($scope, GameService, $location) {
+  controller('SetupController', ['$scope', 'GameService', '$location', '$routeParams', function($scope, GameService, $location, $routeParams) {
     ['beginner', 'intermediate', 'expert'].forEach(function(difficulty) {
       $scope[difficulty] = function() {
         GameService[difficulty]();
         $location.path('/game');
       }
     });
+
+    var requestedDifficulty = $routeParams.difficulty;
+    if(requestedDifficulty) {
+      $scope[requestedDifficulty]();
+    }
   }]).
   controller('GameController', ['$scope', 'GameService', function($scope, GameService) {
     var game = GameService.getGame();
