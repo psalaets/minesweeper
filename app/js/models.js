@@ -262,7 +262,7 @@
         self.ensureNoMine(cell);
       }
 
-      // From here down, process like a normal visit
+      // Process like a normal visit
       self.cellVisited(cell);
     });
 
