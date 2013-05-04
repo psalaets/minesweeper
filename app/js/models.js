@@ -255,6 +255,9 @@
     this.visitsToWin = this.grid.size() - mines;
     this.visits = 0;
 
+    // status can be: pending, playing, win, lose
+    this.status = 'pending';
+
     var self = this;
     this.grid.bind('cellVisited', function(cell) {
       // If first visit is mined cell, move mines around so game can continue.
@@ -281,12 +284,20 @@
 
       // Check for loss
       if(cell.mined) {
-        this.trigger('lose');
+        this.lose();
       } else if(this.visits === this.visitsToWin) { // Check for win
-        this.trigger('win')
+        this.win();
       } else {
         this.cascadeVisits(cell);
       }
+    },
+    win: function() {
+      this.status = 'win';
+      this.trigger('win');
+    },
+    lose: function() {
+      this.status = 'lose';
+      this.trigger('lose');
     },
     // From http://www.techuser.net/minecascade.html
     cascadeVisits: function(cell) {
