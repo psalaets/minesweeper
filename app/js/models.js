@@ -308,7 +308,7 @@
       if(!cell.countAdjacentMines()) {
         cell.getNeighbors().forEach(function(neighbor) {
           if(!neighbor.visited && !neighbor.mined) {
-            neighbor.visit();
+            neighbor.visit('force');
           }
         });
       }

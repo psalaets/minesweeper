@@ -65,7 +65,7 @@ describe('Game', function(){
       expect(g.status).toBe('lose');
     }));
 
-    it('should recursively visit all neighbor cells with no adjacent mines', inject(function(Game) {
+    it('should cascade visit to all neighbor cells with no adjacent mines', inject(function(Game) {
       var g = new Game(3, 3, 1);
       // ugly hack so we control where mine is
       g.grid.clearMines();
@@ -86,6 +86,22 @@ describe('Game', function(){
       expect(center.neighbors.SW.visited).toBe(true);
       expect(center.neighbors.S.visited).toBe(true);
       expect(center.neighbors.SE.visited).toBe(false);
+    }));
+
+    it('should clear bad markers during cascading visit', inject(function(Game) {
+      var g = new Game(3, 3, 1);
+      // ugly hack so we control where mine is
+      g.grid.clearMines();
+      g.grid.getCell(1, 2).mined = true;
+
+      var center = g.grid.getCell(1, 1);
+
+      // set up bad marker - cell with no mine was marked
+      center.neighbors.N.flag();
+
+      g.grid.getCell(0, 0).visit();
+
+      expect(center.neighbors.N.isFlagged()).toBe(false);
     }));
   });
 
