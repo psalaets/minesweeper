@@ -133,7 +133,7 @@ describe('Game', function(){
 
     expect(g.expectedFlags).toEqual(1);
 
-    g.grid.getCell(0, 0).unflag();
+    g.grid.getCell(0, 0).clearMarker();
 
     expect(g.expectedFlags).toEqual(2);
   }));

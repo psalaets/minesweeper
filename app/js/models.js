@@ -22,15 +22,17 @@
   }
 
   Cell.prototype = {
-    visit: function() {
+    visit: function(force) {
+      if(force) this.clearMarker();
+      if(this.visited || this.isFlagged() || this.isBookmarked()) return;
+
       this.visited = true;
       this.trigger('visited', this);
     },
     flag: function() {
+      if(this.visited) return;
+
       this.setMarker('flag');
-    },
-    unflag: function() {
-      this.clearMarker();
     },
     isFlagged: function() {
       return this.marker === 'flag';
@@ -47,20 +49,19 @@
       this.setMarker('none');
     },
     bookmark: function() {
+      if(this.visited) return;
+
       this.setMarker('bookmark');
-    },
-    unbookmark: function() {
-      this.clearMarker();
     },
     isBookmarked: function() {
       return this.marker === 'bookmark';
     },
     cycleMarker: function() {
       if(this.isFlagged()) {
-        this.unflag();
+        this.clearMarker();
         this.bookmark();
       } else if(this.isBookmarked()) {
-        this.unbookmark();
+        this.clearMarker();
       } else {
         this.flag();
       }

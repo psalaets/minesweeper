@@ -20,15 +20,11 @@ angular.module('ms.controllers', ['ms.models', 'ms.services']).
     $scope.game = game;
 
     $scope.visit = function(cell) {
-      if(!cell.visited && !cell.isFlagged() && !cell.isBookmarked()) {
-        cell.visit();
-      }
+      cell.visit();
     };
 
     $scope.cycleMarker = function(cell) {
-      if(!cell.visited) {
-        cell.cycleMarker();
-      }
+      cell.cycleMarker();
     };
 
     game.start();

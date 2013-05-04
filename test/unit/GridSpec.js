@@ -224,7 +224,7 @@ describe('Grid', function(){
         unflagged = cell;
       });
 
-      g.getCell(0, 0).unflag();
+      g.getCell(0, 0).clearMarker();
 
       expect(unflagged).toBe(g.getCell(0, 0));
     }));
@@ -255,7 +255,7 @@ describe('Grid', function(){
         unbookmarked = cell;
       });
 
-      g.getCell(0, 0).unbookmark();
+      g.getCell(0, 0).clearMarker();
 
       expect(unbookmarked).toBe(g.getCell(0, 0));
     }));
