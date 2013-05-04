@@ -18,15 +18,6 @@ angular.module('ms.controllers', ['ms.models', 'ms.services']).
     var game = GameService.getGame();
 
     $scope.game = game;
-    $scope.status = 'playing';
-
-    game.bind('win', function() {
-      $scope.status = 'win!';
-    });
-
-    game.bind('lose', function() {
-      $scope.status = 'lose';
-    });
 
     $scope.visit = function(cell) {
       if(!cell.visited && !cell.isFlagged() && !cell.isBookmarked()) {
