@@ -3,7 +3,7 @@
 describe('Game', function(){
   beforeEach(module('ms.models'));
 
-  describe('newly created', function() {
+  describe('when newly created', function() {
     it('should have pending status', inject(function(Game) {
       var g = new Game(2, 2, 2);
 
@@ -21,7 +21,7 @@ describe('Game', function(){
     }));
   });
 
-  describe('on first cell visit', function() {
+  describe('when first cell is visited', function() {
     it('should not fire lose event even if cell is mined', inject(function(Game) {
       var g = new Game(2, 2, 2);
       var mined = g.grid.find(function(cell) { return cell.mined; });
@@ -37,7 +37,7 @@ describe('Game', function(){
     }));
   });
 
-  describe('on cell visits after first', function() {
+  describe('when cells are visited after first visit', function() {
     it('should fire lose event if cell is mined', inject(function(Game) {
       var g = new Game(2, 2, 2);
       g.grid.getCell(0, 0).visit();
