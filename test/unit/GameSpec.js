@@ -11,6 +11,16 @@ describe('Game', function(){
     }));
   });
 
+  describe('started', function() {
+    it('should have playing status', inject(function(Game) {
+      var g = new Game(2, 2, 2);
+
+      g.start();
+
+      expect(g.status).toBe('playing');
+    }));
+  });
+
   describe('on first cell visit', function() {
     it('should not fire lose event even if cell is mined', inject(function(Game) {
       var g = new Game(2, 2, 2);

@@ -279,6 +279,9 @@
   }
 
   Game.prototype = {
+    start: function() {
+      this.status = 'playing';
+    },
     cellVisited: function(cell) {
       this.visits++;
 

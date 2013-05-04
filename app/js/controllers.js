@@ -30,4 +30,6 @@ angular.module('ms.controllers', ['ms.models', 'ms.services']).
         cell.cycleMarker();
       }
     };
+
+    game.start();
   }]);
