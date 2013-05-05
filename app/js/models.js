@@ -307,9 +307,7 @@
     cascadeVisits: function(cell) {
       if(!cell.countAdjacentMines()) {
         cell.getNeighbors().forEach(function(neighbor) {
-          if(!neighbor.visited) {
-            neighbor.visit('force');
-          }
+          neighbor.visit('force');
         });
       }
     },
