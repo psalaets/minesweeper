@@ -35,7 +35,5 @@ angular.module('ms.controllers', ['ms.models', 'ms.services']).
     });
 
     game.start();
-
-    $scope.timer.reset();
-    $scope.timer.start();
+    $scope.timer.restart();
   }]);

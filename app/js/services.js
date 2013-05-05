@@ -19,9 +19,9 @@ angular.module('ms.services', ['ms.models']).
     };
   }]).
   service('Timer', ['$timeout', function($timeout) {
-    this.secondsElapsed = 0;
-
     var self = this;
+
+    self.secondsElapsed = 0;
 
     function tick() {
       self.secondsElapsed += 1;
@@ -44,5 +44,10 @@ angular.module('ms.services', ['ms.models']).
     this.reset = function() {
       self.stop();
       self.secondsElapsed = 0;
+    };
+
+    this.restart = function() {
+      self.reset();
+      self.start();
     };
   }]);
