@@ -28,8 +28,14 @@ angular.module('ms.controllers', ['ms.models', 'ms.services']).
       cell.cycleMarker();
     };
 
+    $scope.$watch("game.status", function(newValue, oldValue, scope) {
+      if(newValue === 'win' || newValue === 'lose') {
+        scope.timer.stop();
+      }
+    });
+
     game.start();
 
-    Timer.reset();
-    Timer.start();
+    $scope.timer.reset();
+    $scope.timer.start();
   }]);
