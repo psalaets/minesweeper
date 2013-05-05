@@ -24,7 +24,7 @@
     <div>
       <div ng-include="'startGameLinks'"></div>
 
-      {{game.status}} - flags left: {{game.expectedFlags}}, cleared: {{game.visits}} / {{game.visitsToWin}}
+      {{game.status}} - flags left: {{game.expectedFlags}}, cleared: {{game.visits}} / {{game.visitsToWin}}, time: {{timer.secondsElapsed}}
 
       <table class="grid">
         <tr ng-repeat="row in game.grid.rows">

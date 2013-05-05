@@ -14,9 +14,10 @@ angular.module('ms.controllers', ['ms.models', 'ms.services']).
       $scope[requestedDifficulty]();
     }
   }]).
-  controller('GameController', ['$scope', 'GameService', function($scope, GameService) {
+  controller('GameController', ['$scope', 'GameService', 'Timer', function($scope, GameService, Timer) {
     var game = GameService.getGame();
 
+    $scope.timer = Timer;
     $scope.game = game;
 
     $scope.visit = function(cell) {
@@ -28,4 +29,7 @@ angular.module('ms.controllers', ['ms.models', 'ms.services']).
     };
 
     game.start();
+
+    Timer.reset();
+    Timer.start();
   }]);

@@ -17,4 +17,32 @@ angular.module('ms.services', ['ms.models']).
         currentGame = Game.expert();
       }
     };
+  }]).
+  service('Timer', ['$timeout', function($timeout) {
+    this.secondsElapsed = 0;
+
+    var self = this;
+
+    function tick() {
+      self.secondsElapsed += 1;
+      scheduleTick();
+    }
+
+    function scheduleTick() {
+      self.promise = $timeout(tick, 1000);
+    }
+
+    this.start = function() {
+      scheduleTick();
+    };
+
+    this.stop = function() {
+      self.promise && $timeout.cancel(self.promise);
+      delete self.promise;
+    };
+
+    this.reset = function() {
+      self.stop();
+      self.secondsElapsed = 0;
+    };
   }]);
